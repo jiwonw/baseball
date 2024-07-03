@@ -34,3 +34,20 @@ TEST_F(BaseBallTest, Logic001) {
     EXPECT_EQ(answer.strikes, expected.strikes);
     EXPECT_EQ(answer.balls, expected.balls);
 }
+
+TEST_F(BaseBallTest, Logic002) {
+    GameResult answer = game.guess("923");
+    GameResult expected = { false, 2, 0 };
+    EXPECT_EQ(answer.solved, expected.solved);
+    EXPECT_EQ(answer.strikes, expected.strikes);
+    EXPECT_EQ(answer.balls, expected.balls);
+}
+
+TEST_F(BaseBallTest, Logic003) {
+    GameResult answer = game.guess("321");
+    GameResult expected = { false, 1, 2 };
+    EXPECT_EQ(answer.solved, expected.solved);
+    EXPECT_EQ(answer.strikes, expected.strikes);
+    EXPECT_EQ(answer.balls, expected.balls);
+}
+

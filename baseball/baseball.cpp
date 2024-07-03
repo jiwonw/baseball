@@ -55,6 +55,7 @@ public:
             ret.solved = true;
         return ret;
 	}
+
 private:
     bool isNumbers(string text)
     {
