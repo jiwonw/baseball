@@ -3,21 +3,57 @@
 #include <vector>
 using namespace std;
 
-class BaseBall
+struct GameResult
+{
+    bool solved;
+    int strikes;
+    int balls;
+};
+
+class Baseball
 {
 public:
-	string guess(string guessNumber)
-	{
-        if (guessNumber.size() != 3)
-            throw length_error("Should guess 3 digits");
-        if (!isNumbers(guessNumber))
-            throw invalid_argument("Only numbers allowed");
-        if (isDuplicatedNumber(guessNumber))
-            throw invalid_argument("Must not have same number");
+    Baseball(string numbers)
+        : question {numbers}
+    {
+        for (const char ch : numbers)
+            answerNumbers.push_back(ch - '0');
+    }
 
-        vector<int> num;
-        for (const char a : guessNumber)
-            num.push_back(a - '0');
+    void checkInputCondition(const string & numbers)
+    {
+        if (numbers.size() != 3)
+            throw length_error("Should guess 3 digits");
+        if (!isNumbers(numbers))
+            throw invalid_argument("Only numbers allowed");
+        if (isDuplicatedNumber(numbers))
+            throw invalid_argument("Must not have same number");
+    }
+
+    GameResult guess(string guessNumber)
+	{
+        GameResult ret = { false, 0, 0 };
+        checkInputCondition(guessNumber);
+
+        vector<int> nums;
+        for (const char ch : guessNumber)
+            nums.push_back(ch - '0');
+
+        for (int num : nums)
+        {
+            for (int ans : answerNumbers)
+                if (ans == num)
+                    ret.balls++;
+        }
+        for (int i = 0; i < 3; i++)
+        {
+            if (answerNumbers[i] == nums[i])
+                ret.strikes++;
+        }
+        ret.balls -= ret.strikes;
+        if (ret.strikes == 3)
+            ret.solved = true;
+        return ret;
 	}
 private:
     bool isNumbers(string text)
@@ -37,4 +73,6 @@ private:
             return true;
         return false;
     }
+    vector<int> answerNumbers;
+    string question;
 };
